@@ -136,13 +136,14 @@
 #define CONFIG_ENV_OFFSET		0x0 /* Block 0--not used by bootcode */
 #define CONFIG_ENV_SIZE			(128 << 10)
 #define	CONFIG_SYS_NAND_USE_FLASH_BBT
-#define CONFIG_SYS_NAND_4BIT_HW_ECC_OOBFIRST
+// nmy modify
+#define CONFIG_SYS_NAND_1BIT_HW_ECC_OOBFIRST
 #define	CONFIG_SYS_NAND_PAGE_2K
 #define CONFIG_SYS_NAND_CS		3
 #define CONFIG_SYS_NAND_BASE		DAVINCI_ASYNC_EMIF_DATA_CE3_BASE
 #define CONFIG_SYS_CLE_MASK		0x10
 #define CONFIG_SYS_ALE_MASK		0x8
-#undef CONFIG_SYS_NAND_HW_ECC
+#define CONFIG_SYS_NAND_HW_ECC
 #define CONFIG_SYS_MAX_NAND_DEVICE	1 /* Max number of NAND devices */
 #define NAND_MAX_CHIPS			1
 #define DEF_BOOTM			""
@@ -172,6 +173,20 @@
 #define CONFIG_ENV_SECT_SIZE		(64 << 10)	
 #define CONFIG_SYS_NO_FLASH
 #endif
+
+/*
+	nmy add for ubifs fs support
+*/
+#define CONFIG_CMD_UBI
+#define CONFIG_CMD_UBIFS
+#define CONFIG_CMD_MTDPARTS
+#define CONFIG_MTD_DEVICE
+#define CONFIG_MTD_PARTITIONS
+#define CONFIG_RBTREE
+#define CONFIG_LZO 
+#define MTDIDS_DEFAULT "nand0=am1808_nand"
+#define MTDPARTS_DEFAULT "mtdparts=am1808_nand:128k(u-boot-env),128k(UBL),512k(u-boot),4m@0x200000(kernel),128m@0x600000(rootfs),-(reserved)"
+#define MTD_ACTIVE_PART "nand0,4"
 
 /*
  * USB  configuration
@@ -210,6 +225,7 @@
 #define CONFIG_BOOTARGS		"console=ttyS2,115200n8 noinitrd rw ip=dhcp root=/dev/sda2 rootfstype=ext2 mem=128M"
 #define CONFIG_BOOTCOMMAND	"usb start; fatload usb 0:1 0xc0700000 uImage; bootm"
 #define CONFIG_BOOTDELAY	3
+
 
 /*
  * U-Boot commands

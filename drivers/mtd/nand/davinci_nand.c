@@ -175,6 +175,7 @@ static void nand_davinci_hwcontrol(struct mtd_info *mtd, int cmd, unsigned int c
 		writeb(cmd, IO_ADDR_W);
 }
 
+
 #ifdef CONFIG_SYS_NAND_HW_ECC
 
 static void nand_davinci_enable_hwecc(struct mtd_info *mtd, int mode)
