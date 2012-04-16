@@ -34,11 +34,11 @@
 /*
  * Board Lierda Version
  */
-//#define	CONFIG_USE_SPIFLASH
+#define	CONFIG_USE_SPIFLASH
 //#define	CONFIG_SYS_USE_NAND
-#define	CONFIG_USE_NAND
-#undef	CONFIG_USE_SPIFLASH
-//#undef	CONFIG_USE_NAND
+//#define	CONFIG_USE_NAND
+//#undef	CONFIG_USE_SPIFLASH
+#undef	CONFIG_USE_NAND
 #undef	CONFIG_SYS_USE_NOR
 
 /*
@@ -177,6 +177,7 @@
 /*
 	nmy add for ubifs fs support
 */
+#if 0
 #define CONFIG_CMD_UBI
 #define CONFIG_CMD_UBIFS
 #define CONFIG_CMD_MTDPARTS
@@ -187,6 +188,7 @@
 #define MTDIDS_DEFAULT "nand0=am1808_nand"
 #define MTDPARTS_DEFAULT "mtdparts=am1808_nand:128k(u-boot-env),128k(UBL),512k(u-boot),4m@0x200000(kernel),128m@0x600000(rootfs),-(reserved)"
 #define MTD_ACTIVE_PART "nand0,4"
+#endif
 
 /*
  * USB  configuration
