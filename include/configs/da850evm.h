@@ -34,11 +34,11 @@
 /*
  * Board Lierda Version
  */
-#define	CONFIG_USE_SPIFLASH
+#undef	CONFIG_USE_SPIFLASH
 //#define	CONFIG_SYS_USE_NAND
 //#define	CONFIG_USE_NAND
 //#undef	CONFIG_USE_SPIFLASH
-#undef	CONFIG_USE_NAND
+#define	CONFIG_USE_NAND
 #undef	CONFIG_SYS_USE_NOR
 
 /*
@@ -177,7 +177,7 @@
 /*
 	nmy add for ubifs fs support
 */
-#if 0
+#if 1
 #define CONFIG_CMD_UBI
 #define CONFIG_CMD_UBIFS
 #define CONFIG_CMD_MTDPARTS

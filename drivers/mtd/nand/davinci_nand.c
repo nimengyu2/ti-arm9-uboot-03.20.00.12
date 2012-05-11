@@ -194,7 +194,9 @@ static u_int32_t nand_davinci_readecc(struct mtd_info *mtd, u_int32_t region)
 {
 	u_int32_t	ecc = 0;
 
-	ecc = readl(&(emif_regs->NANDFECC[region - 1]));
+	// nmy modify
+	//ecc = readl(&(emif_regs->NANDFECC[region - 1]));
+	ecc = readl(&(emif_regs->NANDFECC[CONFIG_SYS_NAND_CS - 2]));
 
 	return(ecc);
 }
