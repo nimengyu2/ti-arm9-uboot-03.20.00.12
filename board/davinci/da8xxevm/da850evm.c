@@ -420,7 +420,7 @@ static void dspwake(void)
 int misc_init_r(void)
 {
 	uint8_t tmp[20], addr[10];
-
+	printf ("AAAA lierda yuge modify\n");
 	printf ("ARM Clock : %d Hz\n", clk_get(DAVINCI_ARM_CLKID));
 	printf ("DDR Clock : %d Hz\n", clk_get(DAVINCI_DDR_CLKID)/2);
 
