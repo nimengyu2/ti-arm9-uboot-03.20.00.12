@@ -242,6 +242,7 @@ static int gen_get_link_status(int phy_addr)
 	int ret;
 	u_int16_t       tmp11;
 
+#if 0
 	printf("lsd:gen_get_link_status\n");
 
 	ret = davinci_eth_phy_read(phy_addr, LSD_MII_CONTROL_REG, &tmp11);
@@ -255,9 +256,10 @@ static int gen_get_link_status(int phy_addr)
 
 	ret = davinci_eth_phy_read(phy_addr, LSD_MII_AUTO_NEG_EXP_REG, &tmp11);
 	printf("lsd:LSD_MII_AUTO_NEG_EXP_REG:ret=%d,tmp11=0x%08x\n",ret,tmp11);
+#endif
 
 	ret = davinci_eth_phy_read(phy_addr, MII_STATUS_REG, &tmp);
-	printf("lsd:MII_STATUS_REG:ret=%d,tmp=0x%08x\n",ret,tmp);
+	//printf("lsd:MII_STATUS_REG:ret=%d,tmp=0x%08x\n",ret,tmp);
 		
 	if ( ret && (tmp & 0x04)) {
 

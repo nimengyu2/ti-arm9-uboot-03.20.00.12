@@ -287,6 +287,10 @@ err_probe:
 	return ret;
 }
 
+
+
+
+
 #ifdef CONFIG_DRIVER_TI_EMAC_USE_RMII
 /**
  * rmii_hw_init
@@ -310,15 +314,66 @@ err_probe:
 int rmii_hw_init(void)
 {
 	const struct pinmux_config gpio_pins[] = {
-		{ pinmux[6], 8, 1 }
+		//{ pinmux[6], 8, 1 }  //GPIO2[6]
+		{ pinmux[14], 8, 1 }  // GPIO6[6]
 	};
 	u_int8_t buf[2];
 	unsigned int temp;
 	int ret;
+	unsigned long time_i = 0;
+	unsigned long time_j = 0;
+	unsigned long time_k = 0;
 
+	printf("lsd:config gpio function\n");
 	/* PinMux for GPIO */
 	if (davinci_configure_pin_mux(gpio_pins, ARRAY_SIZE(gpio_pins)) != 0)
 		return 1;
+
+	// Set the GPIO direction as output 
+	printf("lsd:config gpio output\n");	
+	temp = REG(GPIO_BANK6_REG_DIR_ADDR);
+	temp &= ~(0x01 << 6);
+	REG(GPIO_BANK6_REG_DIR_ADDR) = temp;
+
+	// Set the output as low 
+	printf("lsd:config gpio output low\n");	
+	temp = REG(GPIO_BANK6_REG_CLR_ADDR);
+	temp |= (0x01 << 6);
+	REG(GPIO_BANK6_REG_CLR_ADDR) = temp;	
+
+	// reset time 
+	printf("wait for delay2\n");
+	for(time_i = 0;time_i < 500;time_i++)
+	{			        
+		for(time_j = 0;time_j < 1000;time_j++)
+		{			
+			time_k++;
+			if(time_k >= 0xFFFFFF)
+				time_k = 0;
+		}
+	}
+	printf("delay out,k=%d\n",time_k);
+
+	#if 1
+	// Set the output as high 
+	printf("lsd:config gpio output high\n");	
+	temp = REG(GPIO_BANK6_REG_SET_ADDR);
+	temp |= (0x01 << 6);
+	REG(GPIO_BANK6_REG_SET_ADDR) = temp;
+	#endif
+
+	// wait reset ok
+	printf("wait for delay2\n");
+	for(time_i = 0;time_i < 8000;time_i++)
+	{			        
+		for(time_j = 0;time_j < 1000;time_j++)
+		{			
+			time_k++;
+			if(time_k >= 0xFFFFFF)
+				time_k = 0;
+		}
+	}
+	printf("delay out,k=%d\n",time_k);
 
 	/* I2C Exapnder configuration */
 	/* Set polarity to non-inverted */
