@@ -128,7 +128,8 @@ static int davinci_eth_phy_detect(void)
 
 	active_phy_addr = 0xff;
 
-	phy_act_state = readl(&adap_mdio->ALIVE) & EMAC_MDIO_PHY_MASK;
+	//phy_act_state = readl(&adap_mdio->ALIVE) & EMAC_MDIO_PHY_MASK;
+	phy_act_state = readl(&adap_mdio->ALIVE) /*& EMAC_MDIO_PHY_MASK*/;
 	if (phy_act_state == 0)
 		return(0);				/* No active PHYs */
 
@@ -201,7 +202,7 @@ int davinci_eth_phy_write(u_int8_t phy_addr, u_int8_t reg_num, u_int16_t data)
 static int gen_init_phy(int phy_addr)
 {
 	int	ret = 1;
-
+	printf("lsd:gen_init_phy\n");
 	if (gen_get_link_speed(phy_addr)) {
 		/* Try another time */
 		ret = gen_get_link_speed(phy_addr);
@@ -213,15 +214,17 @@ static int gen_init_phy(int phy_addr)
 static int gen_is_phy_connected(int phy_addr)
 {
 	u_int16_t	dummy;
-
+	printf("lsd:gen_is_phy_connected\n");
 	return(davinci_eth_phy_read(phy_addr, PHY_PHYIDR1, &dummy));
 }
 
 static int gen_get_link_speed(int phy_addr)
 {
 	u_int16_t	tmp;
-
-	if (davinci_eth_phy_read(phy_addr, MII_STATUS_REG, &tmp) && (tmp & 0x04))
+	int ret;
+	ret = davinci_eth_phy_read(phy_addr, MII_STATUS_REG, &tmp)
+	printf("gen_get_link_speed,tmp=%08x,ret=%d\n",tmp,ret);
+	if ( (ret == 1) && (tmp & 0x04))
 		return(1);
 
 	return(0);
@@ -670,6 +673,7 @@ int davinci_emac_initialize(void)
 	}
 
 	phy_id |= tmp & 0x0000ffff;
+	printf("lsd:phy_id=0x%0x\n",phy_id);
 
 	switch (phy_id) {
 		case PHY_LXT972:
@@ -687,7 +691,8 @@ int davinci_emac_initialize(void)
 			phy.auto_negotiate = dp83848_auto_negotiate;
 			break;
 		default:
-			sprintf(phy.name, "GENERIC @ 0x%02x", active_phy_addr);
+			printf("lsd:phy_id is default\n");
+			sprintf(phy.name, "LSD GENERIC @ 0x%02x", active_phy_addr);
 			phy.init = gen_init_phy;
 			phy.is_phy_connected = gen_is_phy_connected;
 			phy.get_link_speed = gen_get_link_speed;

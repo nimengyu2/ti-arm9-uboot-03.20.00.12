@@ -137,7 +137,7 @@
 #define CONFIG_ENV_SIZE			(128 << 10)
 #define	CONFIG_SYS_NAND_USE_FLASH_BBT
 // nmy modify
-#define CONFIG_SYS_NAND_1BIT_HW_ECC_OOBFIRST
+#define CONFIG_SYS_NAND_4BIT_HW_ECC_OOBFIRST
 #define	CONFIG_SYS_NAND_PAGE_2K
 #define CONFIG_SYS_NAND_CS		3
 #define CONFIG_SYS_NAND_BASE		DAVINCI_ASYNC_EMIF_DATA_CE3_BASE
@@ -203,7 +203,7 @@
 #define CONFIG_MISC_INIT_R
 #undef CONFIG_BOOTDELAY
 #define CONFIG_BOOTFILE		"uImage" /* Boot file name */
-#define CONFIG_SYS_PROMPT	"U-Boot > " /* Command Prompt */
+#define CONFIG_SYS_PROMPT	"YU-Boot > " /* Command Prompt */
 #define CONFIG_SYS_CBSIZE	1024 /* Console I/O Buffer Size	*/
 #define CONFIG_SYS_PBSIZE	(CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)
 #define CONFIG_SYS_MAXARGS	16 /* max number of command args */

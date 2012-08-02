@@ -144,9 +144,14 @@ static int davinci_eth_phy_detect(void)
 	active_phy_addr = 0xff;
 
 	if ((phy_act_state = adap_mdio->ALIVE) == 0)
+	{
+		printf("No active PHYs\n");
 		return(0);				/* No active PHYs */
+	}
 
 	debug_emac("davinci_eth_phy_detect(), ALIVE = 0x%08x\n", phy_act_state);
+	printf("davinci_eth_phy_detect(), ALIVE = 0x%08x\n", phy_act_state);
+		
 
 	for (i = 0; i < 32; i++) {
 		if (phy_act_state & (1 << i)) {
@@ -225,12 +230,36 @@ static int gen_is_phy_connected(int phy_addr)
 	return(davinci_eth_phy_read(phy_addr, PHY_PHYIDR1, &dummy));
 }
 
+
+#define LSD_MII_CONTROL_REG  0
+#define LSD_MII_AUTO_NEG_REG  4
+#define LSD_MII_LINK_PART_REG  5
+#define LSD_MII_AUTO_NEG_EXP_REG  6
+
 static int gen_get_link_status(int phy_addr)
 {
 	u_int16_t	tmp;
+	int ret;
+	u_int16_t       tmp11;
 
-	if (davinci_eth_phy_read(phy_addr, MII_STATUS_REG, &tmp)
-							&& (tmp & 0x04)) {
+	printf("lsd:gen_get_link_status\n");
+
+	ret = davinci_eth_phy_read(phy_addr, LSD_MII_CONTROL_REG, &tmp11);
+	printf("lsd:LSD_MII_CONTROL_REG:ret=%d,tmp11=0x%08x\n",ret,tmp11);
+	
+	ret = davinci_eth_phy_read(phy_addr, LSD_MII_AUTO_NEG_REG, &tmp11);
+	printf("lsd:LSD_MII_AUTO_NEG_REG:ret=%d,tmp11=0x%08x\n",ret,tmp11);
+
+	ret = davinci_eth_phy_read(phy_addr, LSD_MII_LINK_PART_REG , &tmp11);
+	printf("lsd:LSD_MII_LINK_PART_REG :ret=%d,tmp11=0x%08x\n",ret,tmp11);
+
+	ret = davinci_eth_phy_read(phy_addr, LSD_MII_AUTO_NEG_EXP_REG, &tmp11);
+	printf("lsd:LSD_MII_AUTO_NEG_EXP_REG:ret=%d,tmp11=0x%08x\n",ret,tmp11);
+
+	ret = davinci_eth_phy_read(phy_addr, MII_STATUS_REG, &tmp);
+	printf("lsd:MII_STATUS_REG:ret=%d,tmp=0x%08x\n",ret,tmp);
+		
+	if ( ret && (tmp & 0x04)) {
 
 		davinci_eth_phy_read(phy_addr, PHY_ANLPAR, &tmp);
 
@@ -668,10 +697,12 @@ int davinci_emac_initialize(void)
 	}
 
 	phy_id |= tmp & 0x0000ffff;
+	printf("lsd:phy_id=0x%08x\n",phy_id);
+	printf("lsd:active_phy_addr=0x%08x\n",active_phy_addr);
 
 	switch (phy_id) {
 		default:
-			sprintf(phy.name, "GENERIC @ 0x%02x", active_phy_addr);
+			sprintf(phy.name, "LSD GENERIC @ 0x%02x", active_phy_addr);
 			phy.init = gen_init_phy;
 			phy.is_phy_connected = gen_is_phy_connected;
 			phy.get_link_speed = gen_get_link_status;
